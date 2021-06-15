@@ -6,15 +6,18 @@
 </head>
 <body>
 <h1>Test 1 - Názov ulice, a id senzoru ktorá bola najrušnejšia za posledných 24 hodín.</h1>
-<button type="button"><a href="/api.php?hour=16">GET</a></button>
+<button type="button"><a href="api.php?hour=16">GET</a></button>
 <h1>Test 2 - Najrušnejšiu ulicu v nami zadanej hodine.</h1>
-<form action="/action_page.php">
+<form action="api.php">
     <label for="hour">Hodina:</label><br>
-    <input type="text" id="hour" name="hour" value="John"><br>
+    <input type="text" id="hour" name="hour" value="12"><br>
     <input type="submit" value="GET">
 </form>
 <h1>Test 3 - Detailne informácie nami vybraného senzoru za poslednú hodinu.</h1>
-<button type="button"><a href="/api.php?hour=16">GET</a></button>
-
+<form action="api.php">
+    <label for="id">ID:</label><br>
+    <input type="text" id="id" name="id" value="25"><br>
+    <input type="submit" value="GET">
+</form>
 </body>
 </html>
