@@ -15,12 +15,12 @@ function get_sensor_info($id){
 }
 
 function get_sensors_data_last_day(){
-    /*Pedestrian Counting System - Past Hour (counts per minute)*/
-    $sensor_json_url = 'https://data.melbourne.vic.gov.au/resource/d6mv-s43h.json';
-
+    /*Pedestrian Counting System - Monthly (counts per hour)*/
+    $sensor_json_url = 'https://data.melbourne.vic.gov.au/resource/b2ak-trbp.json';
+    $last_available_data_time = get_last_available_with_time(0)->date_time;
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_URL,$sensor_json_url);
+    curl_setopt($ch, CURLOPT_URL,$sensor_json_url . '?$where=date_time%20>%20"' . gmdate("Y-m-d\TH:i:s", strtotime('-1 day', strtotime($last_available_data_time))) . '"');
     $result=curl_exec($ch);
     curl_close($ch);
     return json_decode($result);
@@ -92,7 +92,7 @@ function get_busiest_last_day(){
     }
     $counts_per_sensor_id = array_fill(0,$max_id+1,0);
     foreach($sensors_data as $sensor_data){
-        $counts_per_sensor_id[$sensor_data->sensor_id] += $sensor_data->total_of_directions;
+        $counts_per_sensor_id[$sensor_data->sensor_id] += $sensor_data->hourly_counts;
     }
     foreach($sensors_data as $sensor_data){
         if($counts_per_sensor_id[$sensor_data->sensor_id]>$max_count) {
@@ -101,7 +101,6 @@ function get_busiest_last_day(){
         }
     }
     $max_count_sensor_data = get_sensor_info($max_count_sensor->sensor_id);
-    //echo print_r($max_count_sensor_data);
     return array("sensor_id" => $max_count_sensor->sensor_id,
-        "sensor_description" => $max_count_sensor_data->sensor_description);
+        "sensor_name" => $max_count_sensor_data->sensor_name);
 }
